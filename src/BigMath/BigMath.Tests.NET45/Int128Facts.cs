@@ -185,5 +185,42 @@ namespace BigMath.Tests
             (i1 == i2).Should().Be(!z.HasValue);
             (i1 != i2).Should().Be(z.HasValue);
         }
+
+        [TestCase("0x07FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "1", "0x03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")]
+        [TestCase("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "1", "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")]     //test sign, -1 >> 1 should stay -1
+        [TestCase("0x3A3A3A3A3A3A3A3A0000000000000000", "64", "0x00000000000000003A3A3A3A3A3A3A3A")]
+        [TestCase("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0F", "132", "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0")]   //should do a shift of 4
+        [TestCase("0x0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "132", "0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")]   //should do a shift of 4
+        [TestCase("0x3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A", "2", "0x0E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E")]
+        public void Should_rightShift_correctly(string x, string y, string z)
+        {
+            //
+            // X >> Y should = z
+            //
+            Int128 i1 = Int128.Parse(x);
+            int shifthBy = int.Parse(y);
+            Int128 i3 = i1 >> shifthBy;
+
+            ("0x" + i3.ToString("X32")).Should().Be(z);
+        }
+
+
+        [TestCase("0x03FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "1", "0x07FFFFFFFFFFFFFFFFFFFFFFFFFFFFFE")]
+        [TestCase("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "1", "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE")]     //test sign, -1 >> 1 should stay -1
+        [TestCase("0x00000000000000003A3A3A3A3A3A3A3A", "64", "0x3A3A3A3A3A3A3A3A0000000000000000")]
+        [TestCase("0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0F", "132", "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0F0")]   //should do a shift of 4
+        [TestCase("0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", "132", "0x0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0")]   //should do a shift of 4
+        [TestCase("0x3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A3A", "2", "0xE8E8E8E8E8E8E8E8E8E8E8E8E8E8E8E8")]
+        public void Should_leftShift_correctly(string x, string y, string z)
+        {
+            //
+            // X >> Y should = z
+            //
+            Int128 i1 = Int128.Parse(x);
+            int shifthBy = int.Parse(y);
+            Int128 i3 = i1 << shifthBy;
+
+            ("0x" + i3.ToString("X32")).Should().Be(z);
+        }
     }
 }

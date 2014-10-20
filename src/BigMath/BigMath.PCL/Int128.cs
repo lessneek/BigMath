@@ -1711,9 +1711,9 @@ namespace BigMath
                 return value;
             }
 
-            ulong[] bits = MathUtils.ShiftRight(value.ToUIn64Array(), shift);
-            value._hi = bits[0];
-            value._lo = bits[1];
+            ulong[] bits = MathUtils.ShiftRightSigned(value.ToUIn64Array(), shift);
+            value._hi = bits[1];
+            value._lo = bits[0];    //lo is stored in array entry 0
 
             return value;
         }
@@ -1731,9 +1731,9 @@ namespace BigMath
                 return value;
             }
 
-            ulong[] bits = MathUtils.ShiftRight(value.ToUIn64Array(), shift);
-            value._hi = bits[0];
-            value._lo = bits[1];
+            ulong[] bits = MathUtils.ShiftLeft(value.ToUIn64Array(), shift);
+            value._hi = bits[1];
+            value._lo = bits[0];    //lo is stored in array entry 0
 
             return value;
         }

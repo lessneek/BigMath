@@ -30,6 +30,7 @@ namespace BigMath.Utils
             return shift < 0 ? ShiftLeft(values, -shift) : ShiftRight(values, shift);
         }
 
+
         /// <summary>
         ///     Bitwise right shift.
         /// </summary>
@@ -43,13 +44,13 @@ namespace BigMath.Utils
                 return ShiftLeft(values, -shift);
             }
 
-            const int valueLength = sizeof (ulong)*8;
+            const int valueLength = sizeof(ulong) * 8;
             int length = values.Length;
 
-            shift = shift%(length*valueLength);
+            shift = shift % (length * valueLength);
 
-            int shiftOffset = shift/valueLength;
-            int bshift = shift%valueLength;
+            int shiftOffset = shift / valueLength;
+            int bshift = shift % valueLength;
 
             var shifted = new ulong[length];
             for (int i = 0; i < length; i++)
@@ -66,6 +67,61 @@ namespace BigMath.Utils
                 }
             }
 
+            return shifted;
+        }
+
+        /// <summary>
+        ///     Bitwise right shift.
+        ///     
+        ///     Using an array of ulong's, but when called from Int128 and Int256, value is really a signed number, so we need to preserve the sign bits
+        /// </summary>
+        /// <param name="values">Bits to shift. Lower bits have lower index in array.</param>
+        /// <param name="shift">Shift amount in bits.</param>
+        /// <returns>Shifted values.</returns>
+        public static ulong[] ShiftRightSigned(ulong[] values, int shift)
+        {
+            if (shift < 0)
+            {
+                return ShiftLeft(values, -shift);
+            }
+
+            const int valueLength = sizeof(ulong) * 8;
+            int length = values.Length;
+
+            shift = shift % (length * valueLength);     //This is the defined behavior of shift. Shifting by greater than the number of bits uses a mod
+
+            //
+            //  First, shift over by full ulongs. This could be optimized a bit for longer arrays (if shifting by multiple longs, we do more copies 
+            //  than needed), but for short arrays this is probably the best way to go
+            //
+            while (shift >= valueLength)
+            {
+                for (int i = 0; i < length - 1; i++)
+                {
+                    values[i] = values[i + 1];
+                }
+                values[length - 1] = (ulong)((long)values[length - 1] >> (valueLength - 1));    //Preserve sign of upper long, will either be 0 or all f's
+                shift -= valueLength;
+            }
+
+            //
+            //  Now, we just have a sub-long shift left to do (shift will be < 64 at this point)
+            //
+            if (shift == 0)
+                return (values);
+            int bshift = valueLength - shift;
+
+            //
+            //  In right shifting, upper val is a special case because we need to preserve the sign bits, and because we don't need to or in
+            //  any other values
+            //
+            var shifted = new ulong[length];
+            shifted[length - 1] = (ulong)((long)values[length - 1] >> shift);    //Preserve sign of upper long
+            for (int i = 0; i < length - 1; i++)
+            {
+                shifted[i] = values[i] >> shift;                   //Unsigned, so upper bits stay zero
+                shifted[i] |= (values[i + 1] << bshift);
+            }
             return shifted;
         }
 

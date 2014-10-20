@@ -9,8 +9,8 @@ using System.Resources;
 
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("BigMath")]
-[assembly: AssemblyCopyright("Copyright © 2013 Alexander Logger.")]
+[assembly: AssemblyCopyright("Copyright © 2013-2014 Alexander Logger and community.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
-[assembly: AssemblyVersion("0.4.2")]
+[assembly: AssemblyVersion("0.4.3")]
