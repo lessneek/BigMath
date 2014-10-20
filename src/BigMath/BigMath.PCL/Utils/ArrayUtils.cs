@@ -187,7 +187,7 @@ namespace BigMath.Utils
         /// <param name="spaceEveryByte">Space every byte.</param>
         /// <param name="trimZeros">Trim zeros in the result string.</param>
         /// <returns>Hexadecimal string representation of the bytes array.</returns>
-        public static unsafe string ToHexString(this byte[] bytes, bool caps = true, int min = 0, bool spaceEveryByte = false, bool trimZeros = false)
+        public static string ToHexString(this byte[] bytes, bool caps = true, int min = 0, bool spaceEveryByte = false, bool trimZeros = false)
         {
             if (bytes.Length == 0)
             {
@@ -268,12 +268,7 @@ namespace BigMath.Utils
                 }
             }
 
-            string str;
-            fixed (char* charPtr = chars)
-            {
-                str = new string(charPtr + offset);
-            }
-            return str;
+            return new string(chars, offset, strLength - offset);
         }
 
         /// <summary>
