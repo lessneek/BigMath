@@ -87,9 +87,7 @@ function Invoke-Task
                         Assert ((test-path "variable:$variable") -and ((get-variable $variable).Value -ne $null)) ($msgs.required_variable_not_set -f $variable, $taskName)
                     }
 
-                    Exec $task.Action `
-                        -maxRetries               $task.MaxRetries `
-                        -retryTriggerErrorPattern $task.RetryTriggerErrorPattern
+					& $task.Action
 
                     if ($task.PostAction) {
                         & $task.PostAction
@@ -298,6 +296,7 @@ function Framework {
         [Parameter(Position=0,Mandatory=1)][string]$framework
     )
     $psake.context.Peek().config.framework = $framework
+	ConfigureBuildEnvironment
 }
 
 # .ExternalHelp  psake.psm1-help.xml
@@ -560,6 +559,7 @@ function ConfigureBuildEnvironment {
         throw ($msgs.error_invalid_framework -f $framework)
     }
     $versions = $null
+    $buildToolsVersions = $null
     switch ($versionPart) {
         '1.0' {
             $versions = @('v1.0.3705')
@@ -620,6 +620,7 @@ function ConfigureBuildEnvironment {
             }
         }
     }
+    $frameworkDirs = @()
     if ($buildToolsVersions -ne $null) {
         $frameworkDirs = @($buildToolsVersions | foreach { (Get-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\MSBuild\ToolsVersions\$_" -Name $buildToolsKey).$buildToolsKey })
     }
@@ -824,7 +825,7 @@ convertfrom-stringdata @'
 import-localizeddata -bindingvariable msgs -erroraction silentlycontinue
 
 $script:psake = @{}
-$psake.version = "4.3.1" # contains the current version of psake
+$psake.version = "4.3.2" # contains the current version of psake
 $psake.context = new-object system.collections.stack # holds onto the current state of all variables
 $psake.run_by_psake_build_tester = $false # indicates that build is being run by psake-BuildTester
 $psake.config_default = new-object psobject -property @{
