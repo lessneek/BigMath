@@ -189,23 +189,38 @@ namespace BigMath.Utils
         /// <returns>Hexadecimal string representation of the bytes array.</returns>
         public static string ToHexString(this byte[] bytes, bool caps = true, int min = 0, bool spaceEveryByte = false, bool trimZeros = false)
         {
-            if (bytes.Length == 0)
+            return new ArraySegment<byte>(bytes, 0, bytes.Length).ToHexString(caps, min, spaceEveryByte, trimZeros);
+        }
+
+        /// <summary>
+        ///     Converts array of bytes to hexadecimal string.
+        /// </summary>
+        /// <param name="bytes">Bytes.</param>
+        /// <param name="caps">Capitalize chars.</param>
+        /// <param name="min">Minimum string length. 0 if there is no minimum length.</param>
+        /// <param name="spaceEveryByte">Space every byte.</param>
+        /// <param name="trimZeros">Trim zeros in the result string.</param>
+        /// <returns>Hexadecimal string representation of the bytes array.</returns>
+        public static string ToHexString(this ArraySegment<byte> bytes, bool caps = true, int min = 0, bool spaceEveryByte = false, bool trimZeros = false)
+        {
+            int count = bytes.Count;
+            if (count == 0)
             {
                 return string.Empty;
             }
 
             int strLength = min;
-            
+
             int bim = 0;
             if (trimZeros)
             {
-                bim = bytes.Length - 1;
-                for (int i = 0; i < bytes.Length; i++)
+                bim = count - 1;
+                for (int i = 0; i < count; i++)
                 {
-                    if (bytes[i] > 0)
+                    if (bytes.Array[i+bytes.Offset] > 0)
                     {
                         bim = i;
-                        int l = (bytes.Length - i)*2;
+                        int l = (count - i) * 2;
                         strLength = (l <= min) ? min : l;
                         break;
                     }
@@ -213,7 +228,7 @@ namespace BigMath.Utils
             }
             else
             {
-                strLength = bytes.Length*2;
+                strLength = count * 2;
                 strLength = strLength < min ? min : strLength;
             }
 
@@ -244,11 +259,11 @@ namespace BigMath.Utils
             }
 
             char[][] lookupTable = caps ? LookupTableUpper : LookupTableLower;
-            int bi = bytes.Length - 1;
+            int bi = count - 1;
             int ci = strLength - 1;
             while (bi >= bim)
             {
-                char[] chb = lookupTable[bytes[bi--]];
+                char[] chb = lookupTable[bytes.Array[bi--]];
                 chars[ci--] = chb[1];
                 chars[ci--] = chb[0];
                 ci -= step;
