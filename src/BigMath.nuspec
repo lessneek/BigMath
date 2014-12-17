@@ -28,6 +28,6 @@
 	<file src="BigMath.PCL\bin\$config$\BigMath.dll" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\" />
     <file src="BigMath.PCL\bin\$config$\BigMath.pdb" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\" />
     <file src="BigMath.PCL\bin\$config$\BigMath.XML" target="lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\" />
-    <file src="BigMath.PCL\**\*.cs" target="src\BigMath.PCL\" exclude="**\obj\**"/>
+    <file src="BigMath.PCL\**\*.cs" target="src\BigMath.PCL\" />
   </files>
 </package>
