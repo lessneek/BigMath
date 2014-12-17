@@ -12,6 +12,8 @@ using NUnit.Framework;
 
 namespace BigMath.Tests
 {
+    using System;
+
     [TestFixture]
     public class ArrayUtilsFacts
     {
@@ -25,6 +27,14 @@ namespace BigMath.Tests
         public byte[] Should_convert_hex_string_to_array_of_bytes(string str)
         {
             return str.HexToBytes();
+        }
+
+        [TestCase(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 0, 3, ExpectedResult = "010203")]
+        [TestCase(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 2, 3, ExpectedResult = "030405")]
+        [TestCase(new byte[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }, 6, 3, ExpectedResult = "070809")]
+        public string Shoudl_convert_bytes_array_segment_to_hex_string(byte[] bytes, int offset, int count)
+        {
+            return new ArraySegment<byte>(bytes, offset, count).ToHexString();
         }
 
         private static IEnumerable HexStringToByteArrayTestCases

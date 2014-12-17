@@ -217,7 +217,7 @@ namespace BigMath.Utils
                 bim = count - 1;
                 for (int i = 0; i < count; i++)
                 {
-                    if (bytes.Array[i+bytes.Offset] > 0)
+                    if (bytes.Array[i + bytes.Offset] > 0)
                     {
                         bim = i;
                         int l = (count - i) * 2;
@@ -263,7 +263,7 @@ namespace BigMath.Utils
             int ci = strLength - 1;
             while (bi >= bim)
             {
-                char[] chb = lookupTable[bytes.Array[bi--]];
+                char[] chb = lookupTable[bytes.Array[bytes.Offset + bi--]];
                 chars[ci--] = chb[1];
                 chars[ci--] = chb[0];
                 ci -= step;
