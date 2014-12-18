@@ -1,16 +1,14 @@
 param(
     [string]$config = $null,
-    [string]$packageVersion = $null
+    [string]$version = $null
 )
 
-if (!$config) 
-{    
+if (!$config)
+{
     $config = if (Test-Path Env:Configuration) { Get-Content Env:Configuration } else { 'Debug' }
 }
 
-if (!$packageVersion -and (Test-Path Env:PackageVersion)) { $packageVersion = Get-Content env:PackageVersion };
+if (!$version -and (Test-Path Env:Version)) { $version = Get-Content env:Version };
 
 $here = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)";
-$psakePath = Join-Path $here -Child "lib\psake\psake.psm1";
-Import-Module $psakePath;
-Invoke-psake "$here/Default.ps1" -properties @{'config'=$config; 'packageVersion'=$packageVersion};
+psake "$here/Default.ps1" -properties "@{config='$config'; version='$version'}";
