@@ -21,8 +21,3 @@ Some parts of the code is based on:
 ### Develop builds ###
 [![BigMath build status](https://www.myget.org/BuildSource/Badge/taggersoft?identifier=82116a31-a94f-4cb1-b3d7-24c01e151241)](https://www.myget.org/gallery/taggersoft)
 
-### Donate ###
-
-**Bitcoin** address: [1LMhfheXL9bRuYp6TeVCCvCfeEzVLqXJ2x](bitcoin:1LMhfheXL9bRuYp6TeVCCvCfeEzVLqXJ2x?label=BigMath)
-
-![](donate/BigMath-Donate-BTC-1LMhfheXL9bRuYp6TeVCCvCfeEzVLqXJ2x.png)
